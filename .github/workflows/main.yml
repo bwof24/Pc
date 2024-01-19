@@ -1,0 +1,42 @@
+name: Node.js Deployment
+
+on:
+  push:
+    branches:
+      - main  # Adjust the branch as needed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Install Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '14'
+
+    - name: Install Dependencies
+      run: npm install
+
+    - name: Build
+      run: npm run build  # Adjust this command based on your project setup
+
+    - name: Deploy to Server
+      run: |
+        sshpass -p 'fah12' scp -o StrictHostKeyChecking=no -r ./dist fahim@192.168.1.210:/path/to/your/destination
+
+  ssh-connection:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Set up SSH in Termux
+      uses: webfactory/ssh-agent@v0.5.5
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: SSH to Localhost in Termux
+      run: ssh fahim@192.168.1.210  # Adjust the username and IP address
+
