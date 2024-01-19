@@ -8,7 +8,7 @@ jobs:
     name: Start Building...
     runs-on: windows-latest
     timeout-minutes: 9999
-
+    
     steps:
       - name: Downloading & Installing Essentials
         run: |
@@ -18,16 +18,14 @@ jobs:
       - name: Log In To AnyDesk
         run: cmd /c show.bat
 
+      - name: Install sshpass
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y sshpass
+
+      - name: Run command with password
+        run: |
+          sshpass -p 'fahim2' ssh fahim@192.168.1.210 'echo "Hello, world!"'
+
       - name: Time Counter
         run: python time.py
-
-      - name: SSH Control Connection
-        uses: appleboy/ssh-action@master
-        with:
-          host: 192.168.1.210
-          username: fahim
-          password: fahim2
-          script: |
-            # Add your SSH commands here
-            echo "Connected via SSH to 192.168.1.210 as fahim"
-            # Add more commands as needed
